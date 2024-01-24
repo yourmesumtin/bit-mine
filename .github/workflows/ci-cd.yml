@@ -1,0 +1,47 @@
+name: CI/CD Pipeline
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-scan:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Build Docker image
+      run: docker build -t yourme/bitcoin-core:22.0 .
+           docker run --rm -it yourme/bitcoin-core:22.0
+
+
+    - name: Scan the Docker image with Anchore
+      uses: anchore/scan-action@v3
+      with:
+        image: "yourme/bitcoin-core:22.0"
+        fail-build: true
+
+  deploy:
+    needs: build-and-scan
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: your-aws-region
+
+    - name: Set up Kubernetes configuration
+      run: |
+        aws eks --region your-aws-region update-kubeconfig --name your-eks-cluster-name
+
+    - name: Deploy to Kubernetes
+      run: |
+        kubectl apply -f k8s/
+
+    - name: Deploy elastic agent for log forwarding
+      run: kubectl apply -f elastic-agent-managed-kubernetes.yml

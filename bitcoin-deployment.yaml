@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bitcoin-core-deployment
+spec:
+  replicas: 3  # Ensuring very high availability
+  selector:
+    matchLabels:
+      app: bitcoin-core
+  template:
+    metadata:
+      labels:
+        app: bitcoin-core
+    spec:
+      securityContext:
+        runAsNonRoot: true
+      containers:
+      - name: bitcoin-core
+        image: myrepo/bitcoin-core:22.0
+        ports:
+        - containerPort: 8332
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+        volumeMounts:
+        - name: bitcoin-data
+          mountPath: /bitcoin
+      volumes:
+      - name: bitcoin-data
+        persistentVolumeClaim:
+          claimName: bitcoin-data-pvc
