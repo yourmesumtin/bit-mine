@@ -13,7 +13,7 @@ jobs:
 
     - name: Build Docker image
       run: docker build -t yourme/bitcoin-core:22.0 .
-           docker run --rm -it yourme/bitcoin-core:22.0
+           docker run yourme/bitcoin-core:22.0
 
 
     - name: Scan the Docker image with Anchore
