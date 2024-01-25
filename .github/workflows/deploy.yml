@@ -2,7 +2,13 @@ name: Deploy Bitcoin Core to EKS
 
 on:
     workflow_dispatch:
-        
+        inputs:
+            environment:
+              description: 'Environment to deploy to: aws'
+              required: true
+              type: choice
+              options:
+                - "bitcoin-core"
 #   push:
 #     branches: main
 
@@ -14,17 +20,19 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v3
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: region-name
+          aws-region: ${{ vars.REGION }}
 
       - name: Update kubeconfig
-        run: aws eks update-kubeconfig --name cluster-name
+        run: aws eks update-kubeconfig --name bitcoin
 
       - name: Apply Kubernetes manifests
-        run: kubectl apply -f kubernetes/deployment.yaml -f kubernetes/service.yaml
+        run: |
+            kubectl apply -f k8s/ 
+            kubectl apply -f elastic-agent-managed-kubernetes.yml
 
       - name: Verify Pod Health
         run: |

@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: bitcoin-core-deployment
 spec:
-  replicas: 3  # Ensuring very high availability
+  replicas: 2  # Ensuring very high availability
   selector:
     matchLabels:
       app: bitcoin-core
@@ -16,7 +16,7 @@ spec:
         runAsNonRoot: true
       containers:
       - name: bitcoin-core
-        image: myrepo/bitcoin-core:26.0
+        image: yourme/bitcoin-core:c55c832c842c74a9d397ade208dfb76f6bb8dd2c
         ports:
         - containerPort: 8332
         resources:
