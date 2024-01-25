@@ -11,7 +11,7 @@ ARG BITCOIN_SHA256_URL
 ARG BITCOIN_ASC_URL
 
 # Install dependencies needed to fetch, verify, and run Bitcoin Core
-RUN apk update && apk install -y wget gnupg git \
+RUN apt-get update && apt-get install -y wget gnupg git \
     && rm -rf /var/lib/apt/lists/*
 
 
