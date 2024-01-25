@@ -1,0 +1,36 @@
+name: Build and Push Bitcoin Core Image
+
+on:
+  push:
+    branches: main
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and Push Docker image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: yourme/bitcoin-core:${{ github.sha }}
+          build-args: |
+            BITCOIN_URL=${{ vars.BITCOIN_URL}}
+            BITCOIN_SHA256_URL=${{ vars.BITCOIN_SHA256_URL }}
+            BITCOIN_ASC_URL=${{ vars.BITCOIN_ASC_URL }}
+
+      - name: Validate Image Security with Anchore
+        uses: anchore/scan-action@v3
+        with:
+          image: 'yourme/bitcoin-core:${{ github.sha }}'
+          fail-build: true

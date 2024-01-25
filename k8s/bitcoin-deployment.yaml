@@ -16,7 +16,7 @@ spec:
         runAsNonRoot: true
       containers:
       - name: bitcoin-core
-        image: myrepo/bitcoin-core:22.0
+        image: myrepo/bitcoin-core:26.0
         ports:
         - containerPort: 8332
         resources:

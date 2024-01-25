@@ -3,9 +3,12 @@ FROM debian:buster-slim
 
 # Set environment variables for the Bitcoin Core version
 ENV BITCOIN_VERSION=26.0
-ENV BITCOIN_URL=https://bitcoincore.org/bin/bitcoin-core-${BITCOIN_VERSION}/bitcoin-${BITCOIN_VERSION}-x86_64-linux-gnu.tar.gz
-ENV BITCOIN_SHA256_URL=https://bitcoincore.org/bin/bitcoin-core-${BITCOIN_VERSION}/SHA256SUMS
-ENV BITCOIN_ASC_URL=https://bitcoincore.org/bin/bitcoin-core-${BITCOIN_VERSION}/SHA256SUMS.asc
+ENV BITCOIN_DATA="/home/bitcoin/.bitcoin"
+
+# Accept build arguments
+ARG BITCOIN_URL
+ARG BITCOIN_SHA256_URL
+ARG BITCOIN_ASC_URL
 
 # Install dependencies needed to fetch, verify, and run Bitcoin Core
 RUN apt-get update && apt-get install -y wget gnupg git \
