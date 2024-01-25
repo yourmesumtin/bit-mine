@@ -2,7 +2,7 @@
 FROM debian:buster-slim
 
 # Set environment variables for the Bitcoin Core version
-ENV BITCOIN_VERSION=22.0
+ENV BITCOIN_VERSION=26.0
 ENV BITCOIN_URL=https://bitcoincore.org/bin/bitcoin-core-${BITCOIN_VERSION}/bitcoin-${BITCOIN_VERSION}-x86_64-linux-gnu.tar.gz
 ENV BITCOIN_SHA256_URL=https://bitcoincore.org/bin/bitcoin-core-${BITCOIN_VERSION}/SHA256SUMS
 ENV BITCOIN_ASC_URL=https://bitcoincore.org/bin/bitcoin-core-${BITCOIN_VERSION}/SHA256SUMS.asc
@@ -17,7 +17,7 @@ RUN wget ${BITCOIN_URL} \
     && wget ${BITCOIN_ASC_URL}
 
 # Download the specific GPG key
-RUN wget https://github.com/bitcoin-core/guix.sigs/tree/main/builder-keys/fanquake.gpg -O fanquake.gpg
+RUN wget https://raw.githubusercontent.com/bitcoin-core/guix.sigs/main/builder-keys/fanquake.gpg -O fanquake.gpg
 
 # Clone the guix.sigs repository to get the public keys
 RUN git clone https://github.com/bitcoin-core/guix.sigs.git
@@ -49,3 +49,6 @@ EXPOSE 8332
 
 # Run Bitcoin daemon by default
 ENTRYPOINT ["bitcoind"]
+
+
+

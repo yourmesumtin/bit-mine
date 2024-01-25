@@ -12,8 +12,8 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: Build Docker image
-    #   run: docker build -t yourme/bitcoin-core:22.0 .
-      run: docker run somerepo/bitcoin-core:22.0
+      run: docker build -t yourme/bitcoin-core:26.0 .
+           docker run yourme/bitcoin-core:26.0
 
 
     - name: Scan the Docker image with Anchore
@@ -35,14 +35,14 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ vars.REGION }}
 
-    - name: Set up Kubernetes configuration
-      run: |
-        aws eks --region us-east-2 update-kubeconfig --name bitcoin
+    # - name: Set up Kubernetes configuration
+    #   run: |
+    #     aws eks --region us-east-2 update-kubeconfig --name bitcoin
 
-    - name: Deploy to Kubernetes
-      run: |
-        kubectl apply -f k8s/
+    # - name: Deploy to Kubernetes
+    #   run: |
+    #     kubectl apply -f k8s/
 
 
-    - name: Deploy elastic agent for log forwarding
-      run: kubectl apply -f elastic-agent-managed-kubernetes.yml
+    # - name: Deploy elastic agent for log forwarding
+    #   run: kubectl apply -f elastic-agent-managed-kubernetes.yml
