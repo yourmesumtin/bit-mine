@@ -2,7 +2,7 @@
 FROM debian:latest
 
 # Set environment variables for the Bitcoin Core version
-ENV BITCOIN_VERSION=26.0
+ENV BITCOIN_VERSION=22.0
 ENV BITCOIN_DATA="/home/bitcoin/.bitcoin"
 
 # Accept build arguments
