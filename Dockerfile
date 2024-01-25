@@ -11,7 +11,7 @@ ARG BITCOIN_SHA256_URL
 ARG BITCOIN_ASC_URL
 
 # Install dependencies needed to fetch, verify, and run Bitcoin Core
-RUN apt-get update && apt-get install -y wget gnupg git \
+RUN apk update && apk install -y wget gnupg git \
     && rm -rf /var/lib/apt/lists/*
 
 # Download Bitcoin Core binaries, SHA256 checksums, and the corresponding signatures
@@ -34,17 +34,19 @@ RUN sha256sum --ignore-missing --check SHA256SUMS \
     && gpg --verify SHA256SUMS.asc
 
 # Clean up git and other unnecessary packages to reduce image size
-RUN apt-get remove --purge -y git \
-    && apt-get autoremove -y \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* /guix.sigs
+# RUN apt-get remove --purge -y git \
+#     && apt-get autoremove -y \
+#     && apt-get clean \
+#     && rm -rf /var/lib/apt/lists/* /guix.sigs
+RUN apk del git
 
 # Install Bitcoin Core
 RUN tar -xzf bitcoin-${BITCOIN_VERSION}-x86_64-linux-gnu.tar.gz -C /usr/local --strip-components=1 \
     && rm *.tar.gz SHA256SUMS SHA256SUMS.asc
 
 # Create a non-root user to run the daemon
-RUN groupadd -r bitcoin && useradd -r -m -g bitcoin bitcoin
+# RUN groupadd -r bitcoin && useradd -r -m -g bitcoin bitcoin
+RUN addgroup -S bitcoin && adduser -S -G bitcoin bitcoin
 USER bitcoin
 
 # Expose the port Bitcoin daemon listens on
