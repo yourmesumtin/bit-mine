@@ -30,7 +30,7 @@ jobs:
             BITCOIN_ASC_URL=${{ vars.BITCOIN_ASC_URL }}
 
       - name: Validate Image Security with Anchore
-        uses: anchore/scan-action@v2
+        uses: anchore/scan-action@v3.6.1
         with:
           image: 'yourme/bitcoin-core:${{ github.sha }}'
           fail-build: true
