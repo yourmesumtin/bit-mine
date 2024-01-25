@@ -1,5 +1,5 @@
 # Use a lightweight version of Debian as the base image
-FROM debian:buster-slim
+FROM alpine:latest
 
 # Set environment variables for the Bitcoin Core version
 ENV BITCOIN_VERSION=26.0
