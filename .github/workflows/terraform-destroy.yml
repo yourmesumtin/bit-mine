@@ -51,6 +51,10 @@ jobs:
     - name: Change to Terraform Directory
       run: cd tf-aws-resources
 
+    - name: Terraform Init
+      run: terraform init
+      working-directory: tf-aws-resources
+
     - name: Terraform Destroy
       if: github.event.inputs.environment == 'production'
       run: terraform destroy -auto-approve -input=false
