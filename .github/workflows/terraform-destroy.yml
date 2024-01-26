@@ -55,6 +55,12 @@ jobs:
       run: terraform init
       working-directory: tf-aws-resources
 
+    - name: Terraform State List
+      run: terraform state list
+      working-directory: tf-aws-resources
+      if: github.event.inputs.environment == 'production'
+    
+
     - name: Terraform Destroy
       if: github.event.inputs.environment == 'production'
       run: terraform destroy -auto-approve -input=false
