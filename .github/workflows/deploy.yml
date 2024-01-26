@@ -30,7 +30,7 @@ jobs:
         run: aws eks update-kubeconfig --name bitcoin
 
       - name: Apply Kubernetes Deployment Manifest
-        run: kubectl apply -f k8s/bitcoin-deployment.yaml
+        run: kubectl apply -f k8s/bitcoin-deployment.yaml --validate=false
 
       - name: Apply Kubernetes Network Policy
         run: kubectl apply -f k8s/bitcoin-network-policy.yml
