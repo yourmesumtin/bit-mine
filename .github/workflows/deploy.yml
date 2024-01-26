@@ -26,25 +26,26 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ vars.REGION }}
 
-    #   - name: Get AWS EKS cluster endpoint
-    #     uses: aws-actions/eks-describe-cluster@v1
-    #     with:
-    #         name: bitcoin
-    #         output: endpoint
-    #   - name: Get Kubernetes API credentials
-    #     uses: aws-actions/eks-get-token@v1
-    #     with:
-    #         cluster-name: bitcoin
-
       - name: Update kubeconfig
         run: aws eks update-kubeconfig --name bitcoin
 
-      - name: Apply Kubernetes manifests
-        run: |
-            kubectl config set-cluster default --server=$ENDPOINT --insecure-skip-tls-verify=true --token=$TOKEN
-            kubectl apply -f k8s/ 
+      - name: Apply Kubernetes Deployment Manifest
+        run: kubectl apply -f k8s/bitcoin-deployment.yaml
 
-      - name: Verify Pod Health
-        run: |
-          while [[ $(kubectl get pods -l app=bitcoin -o jsonpath='{.items[*].status.phase}') != "Running" ]]; do echo "waiting for pod to be in Running state" && sleep 10; done
-          kubectl logs -l app=bitcoin
+      - name: Apply Kubernetes Network Policy
+        run: kubectl apply -f k8s/bitcoin-network-policy.yml
+
+      - name: Apply Kubernetes PVC Manifest
+        run: kubectl apply -f k8s/bitcoin-pvc.yml
+
+      - name: Apply Kubernetes Service Manifest
+        run: kubectl apply -f k8s/bitcoin-service.yml
+
+      - name: Verify Deployment
+        run: kubectl rollout status deployment/bitcoin-core-deployment -n bitcoin
+
+      - name: Get Service Details
+        run: kubectl get services -n bitcoin
+
+      - name: Get PVC Details
+        run: kubectl get pvc -n bitcoin

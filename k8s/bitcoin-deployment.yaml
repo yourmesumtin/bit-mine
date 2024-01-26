@@ -2,8 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: bitcoin-core-deployment
+  namespace: bitcoin
 spec:
-  replicas: 2  # Ensuring very high availability
+  replicas: 2  
   selector:
     matchLabels:
       app: bitcoin-core
@@ -16,7 +17,7 @@ spec:
         runAsNonRoot: true
       containers:
       - name: bitcoin-core
-        image: yourme/bitcoin-core:c55c832c842c74a9d397ade208dfb76f6bb8dd2c
+        image: yourme/bitcoin-core:latest
         ports:
         - containerPort: 8332
         resources:

@@ -35,7 +35,17 @@ for ip in "${!ip_count[@]}"; do
 done | sort -k2,2nr
 
 
-PYTHON SCRIPT web.py
+RUN  ./web.sh >> result.tx  (This command will run the script and append to result.txt)
+
+## Output
+IP Address      Frequency
+192.168.21.34           4
+192.168.22.11           3
+10.32.89.34             2
+172.32.9.12             1
+
+
+## PYTHON SCRIPT web.py
 
 # IP Address Frequency Analysis Script
 
@@ -61,7 +71,7 @@ This Python script is designed to analyze a web server log file and calculate th
 
 3. **Running the Script**: Execute the script via the command line:
 
-   python web.py
+   python web.py >> result.tx  (This command will run the script and append to result.txt)
 
 ## Output
 IP Address      Frequency
