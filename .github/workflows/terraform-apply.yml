@@ -1,4 +1,4 @@
-name: 'Terraform Apply'
+name: 'Terraform IAM'
 
 on:
     workflow_dispatch:
@@ -12,6 +12,13 @@ on:
                 - "production"
                 - "development"
                 - "staging"
+            action:
+                description: 'Action to perform: apply or destroy'
+                required: true
+                type: choice
+                options:
+                  - "apply"
+                  - "destroy"
 
     # push:
     #  branches: [ "main" ]
@@ -70,7 +77,12 @@ jobs:
       run: terraform plan -input=false
       working-directory: tf-aws-resources
 
-    - name: Terraform Apply
-      if: github.event.inputs.environment == 'production'
-      run: terraform apply -auto-approve -input=false
+    - name: Terraform Apply or Destroy
+      run: |
+        if [ "${{ github.event.inputs.action }}" == "apply" ]; then
+          terraform apply -auto-approve
+        elif [ "${{ github.event.inputs.action }}" == "destroy" ]; then
+          terraform destroy -auto-approve
+        fi
       working-directory: tf-aws-resources
+      if: github.event.inputs.environment == 'production'
