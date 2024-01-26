@@ -29,6 +29,13 @@ jobs:
       - name: Update kubeconfig
         run: aws eks update-kubeconfig --name bitcoin --region us-east-2
 
+      - name: Get current Kubernetes context
+        run: kubectl config current-context
+      
+
+      - name: Cat kubernetes
+        run: cat $HOME/.kube/config
+
       - name: Apply Kubernetes Deployment Manifest
         run: kubectl apply -f k8s/bitcoin-deployment.yaml --validate=false
 
