@@ -43,28 +43,31 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ vars.REGION }}
-
+    
+    - name: List directory structure
+      run: ls -R
+      
      # Change working directory for Terraform commands
     - name: Change to Terraform Directory
-      run: cd bit-mine/tf-aws-resources
+      run: cd tf-aws-resources
 
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
       run: terraform init
-      working-directory: bit-mine/tf-aws-resources
+      working-directory: tf-aws-resources
 
     # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format
       run: terraform fmt -check
-      working-directory: bit-mine/tf-aws-resources
+      working-directory: tf-aws-resources
 
     # Generates an execution plan for Terraform
     - name: Terraform Plan
       run: terraform plan -input=false
-      working-directory: bit-mine/tf-aws-resources
+      working-directory: tf-aws-resources
 
     - name: Terraform Apply
       if: github.event.inputs.environment == 'production'
       run: terraform apply -auto-approve -input=false
-      working-directory: bit-mine/tf-aws-resources
+      working-directory: tf-aws-resources
