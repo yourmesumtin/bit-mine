@@ -26,8 +26,6 @@ This Terraform module is designed to create a set of AWS IAM resources including
 
 ## Initialize and Apply Terraform configuration
 
-## Initialize and Apply Terraform Configuration
-
 After writing your Terraform configuration, the next step is to initialize the Terraform working directory and apply the configuration to create the infrastructure.
 
 Here's an example output of a successful `terraform init` command:
