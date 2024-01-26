@@ -2,16 +2,16 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: bitcoin-core-deployment
-  namespace: bitcoin
+  namespace: default
 spec:
-  replicas: 2  
+  replicas: 1 
   selector:
     matchLabels:
-      app: bitcoin-core
+      app: bitcoin-core-deployment-label
   template:
     metadata:
       labels:
-        app: bitcoin-core
+        app: bitcoin-core-deployment-label
     spec:
       securityContext:
         runAsNonRoot: true
