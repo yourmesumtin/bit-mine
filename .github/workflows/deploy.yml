@@ -26,11 +26,22 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ vars.REGION }}
 
+    #   - name: Get AWS EKS cluster endpoint
+    #     uses: aws-actions/eks-describe-cluster@v1
+    #     with:
+    #         name: bitcoin
+    #         output: endpoint
+    #   - name: Get Kubernetes API credentials
+    #     uses: aws-actions/eks-get-token@v1
+    #     with:
+    #         cluster-name: bitcoin
+
       - name: Update kubeconfig
         run: aws eks update-kubeconfig --name bitcoin
 
       - name: Apply Kubernetes manifests
         run: |
+            kubectl config set-cluster default --server=$ENDPOINT --insecure-skip-tls-verify=true --token=$TOKEN
             kubectl apply -f k8s/ 
             kubectl apply -f elastic-agent-managed-kubernetes.yml
 
