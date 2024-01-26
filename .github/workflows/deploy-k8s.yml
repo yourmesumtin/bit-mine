@@ -24,7 +24,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ vars.REGION }}
+          aws-region: ${{ vars.AWS_REGION }}
 
       - name: Update kubeconfig
         run: aws eks update-kubeconfig --name bitcoin --region us-east-2
@@ -32,20 +32,20 @@ jobs:
       - name: Apply Kubernetes Deployment Manifest
         run: kubectl apply -f k8s/bitcoin-deployment.yaml --validate=false
 
-      - name: Apply Kubernetes Network Policy
-        run: kubectl apply -f k8s/bitcoin-network-policy.yml
+      # - name: Apply Kubernetes Network Policy
+      #   run: kubectl apply -f k8s/bitcoin-network-policy.yml
 
-      - name: Apply Kubernetes PVC Manifest
-        run: kubectl apply -f k8s/bitcoin-pvc.yml
+      # - name: Apply Kubernetes PVC Manifest
+      #   run: kubectl apply -f k8s/bitcoin-pvc.yml
 
-      - name: Apply Kubernetes Service Manifest
-        run: kubectl apply -f k8s/bitcoin-service.yml
+      # - name: Apply Kubernetes Service Manifest
+      #   run: kubectl apply -f k8s/bitcoin-service.yml
 
-      - name: Verify Deployment
-        run: kubectl rollout status deployment/bitcoin-core-deployment -n bitcoin
+      # - name: Verify Deployment
+      #   run: kubectl rollout status deployment/bitcoin-core-deployment -n bitcoin
 
-      - name: Get Service Details
-        run: kubectl get services -n bitcoin
+      # - name: Get Service Details
+      #   run: kubectl get services -n bitcoin
 
-      - name: Get PVC Details
-        run: kubectl get pvc -n bitcoin
+      # - name: Get PVC Details
+      #   run: kubectl get pvc -n bitcoin
