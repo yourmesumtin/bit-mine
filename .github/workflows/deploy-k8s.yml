@@ -26,15 +26,15 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ vars.AWS_REGION }}
 
-      - name: Update kubeconfig
+      - name: Update kube config
         run: aws eks update-kubeconfig --name bitcoin --region us-east-2
 
-      - name: Get current Kubernetes context
-        run: kubectl config current-context
+      # - name: Get current Kubernetes context
+      #   run: kubectl config current-context
       
 
-      - name: Cat kubernetes
-        run: cat $HOME/.kube/config
+      # - name: Cat kubernetes
+      #   run: cat $HOME/.kube/config
 
       - name: Apply Kubernetes Deployment Manifest
         run: kubectl apply -f k8s/bitcoin-deployment.yaml --validate=false
