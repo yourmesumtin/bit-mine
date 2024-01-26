@@ -27,7 +27,7 @@ jobs:
           aws-region: ${{ vars.REGION }}
 
       - name: Update kubeconfig
-        run: aws eks update-kubeconfig --name bitcoin
+        run: aws eks update-kubeconfig --name bitcoin --region us-east-2
 
       - name: Apply Kubernetes Deployment Manifest
         run: kubectl apply -f k8s/bitcoin-deployment.yaml --validate=false
