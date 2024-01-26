@@ -60,3 +60,7 @@ Here is the IAM User that belongs to the group:
 
 
 
+## References
+- [AWS IAM User Documentation](https://docs.aws.amazon.com/)
+- [Terraform AWS IAM Policy Module](https://github.com/terraform-aws-modules/terraform-aws-iam)
+- [Terraform AWS Provider Documentation](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment)
