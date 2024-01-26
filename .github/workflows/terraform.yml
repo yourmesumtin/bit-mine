@@ -4,12 +4,22 @@ on:
     workflow_dispatch:
         inputs:
             environment:
-              description: 'Environment to deploy to: t, d , c, p'
-              required: true
-              type: choice
-              options:
+                description: 'Environment to deploy to: t, d , s, p'
+                required: true
+                type: choice
+                options:
                 - "test"
                 - "production"
+                - "development"
+                - "staging"
+            action:
+                description: 'Action to perform: apply or destroy'
+                required: true
+                type: choice
+                options:
+                - "apply"
+                - "destroy"
+
     # push:
     #  branches: [ "main" ]
     # pull_request:
@@ -29,16 +39,16 @@ jobs:
     steps:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v1
+      uses: hashicorp/setup-terraform@v3
       with:
         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
     - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v3
+      uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -68,6 +78,11 @@ jobs:
       working-directory: tf-aws-resources
 
     - name: Terraform Apply
-      if: github.event.inputs.environment == 'production'
+      if: github.event.inputs.action == 'apply' && github.event.inputs.environment == 'production'
       run: terraform apply -auto-approve -input=false
+      working-directory: tf-aws-resources
+
+    - name: Terraform Destroy
+      if: github.event.inputs.action == 'destroy' && github.event.inputs.environment == 'production'
+      run: terraform destroy -auto-approve -input=false
       working-directory: tf-aws-resources
