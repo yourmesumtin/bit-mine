@@ -37,7 +37,7 @@ jobs:
       #   run: cat $HOME/.kube/config
 
       - name: Apply Kubernetes Deployment Manifest
-        run: kubectl apply -f k8s/bitcoin-deployment.yaml --validate=false
+        run: kubectl apply -f k8s/bitcoin-deployment.yaml 
 
       # - name: Apply Kubernetes Network Policy
       #   run: kubectl apply -f k8s/bitcoin-network-policy.yml
